@@ -1,0 +1,9 @@
+{
+  "tema": "Asincronia al client",
+  "resultat": "ok",
+  "items": [
+    "Carrega no bloquejant",
+    "Control de response.ok",
+    "try/catch"
+  ]
+}

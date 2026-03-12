@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo arquitectura: State → Render → Storage</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="panel hero">
+        <h1>Demo didàctica: Persistència + Arquitectura UI</h1>
+        <p>
+          Patró docent central: <strong>State → Render → Storage</strong>. Tot canvi
+          passa per <code>setState</code>.
+        </p>
+      </header>
+
+      <section class="grid">
+        <article class="panel controls">
+          <h2>1) Preferències persistides</h2>
+          <div class="field-row">
+            <label for="themeSelect">Tema</label>
+            <select id="themeSelect">
+              <option value="light">Clar</option>
+              <option value="dark">Fosc</option>
+            </select>
+          </div>
+
+          <div class="field-row">
+            <label for="fontRange">Mida font</label>
+            <input id="fontRange" type="range" min="90" max="120" step="5" />
+            <span id="fontValue"></span>
+          </div>
+
+          <div class="field-row checkbox-row">
+            <input id="motionToggle" type="checkbox" />
+            <label for="motionToggle">Reduir motion</label>
+          </div>
+
+          <h2>2) Estat de vista + filtres</h2>
+          <div class="field-row">
+            <label for="searchInput">Filtre text</label>
+            <input id="searchInput" type="search" placeholder="Cerca per títol o categoria" />
+          </div>
+
+          <div class="field-row checkbox-row">
+            <input id="onlyFavs" type="checkbox" />
+            <label for="onlyFavs">Només favorits</label>
+          </div>
+
+          <div class="view-switch">
+            <button id="btnCards" type="button">Vista targetes</button>
+            <button id="btnList" type="button">Vista llista</button>
+          </div>
+
+          <div class="tool-row">
+            <button id="btnReload" type="button">Recarregar des d'storage</button>
+            <button id="btnCorrupt" type="button">Corrompre IDs (demo)</button>
+            <button id="btnReset" type="button">Reset complet</button>
+          </div>
+        </article>
+
+        <article class="panel output">
+          <h2>3) Render d'elements</h2>
+          <p id="statusLine" class="status-line"></p>
+          <div id="itemsView" class="items-view" aria-live="polite"></div>
+        </article>
+      </section>
+
+      <section class="grid secondary">
+        <article class="panel notes">
+          <h2>Recordatori docent</h2>
+          <ul>
+            <li><strong>State</strong>: dades i veritat única.</li>
+            <li><strong>Render</strong>: pinta UI a partir de l'estat.</li>
+            <li><strong>Storage</strong>: persisteix trossos útils.</li>
+            <li><strong>Regla d'or</strong>: <code>render()</code> no llegeix ni escriu storage.</li>
+          </ul>
+          <pre class="code-block">function setState(patch) {
+  state = { ...state, ...patch };
+  render();
+  persistState(patch);
+}</pre>
+        </article>
+
+        <article class="panel debug">
+          <h2>Debug de l'estat (docent)</h2>
+          <pre id="stateDump" class="state-dump"></pre>
+        </article>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

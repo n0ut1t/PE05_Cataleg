@@ -1,0 +1,183 @@
+:root {
+  --bg: #f5f7fb;
+  --panel: #ffffff;
+  --border: #d9deea;
+  --text: #1f2a44;
+  --muted: #5f6c85;
+  --brand: #0b5fff;
+  --ok: #1f7a45;
+  --warn: #9a6700;
+  --danger: #b42318;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.container {
+  width: min(1120px, 94vw);
+  margin: 28px auto;
+  display: grid;
+  gap: 16px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.hero p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.grid.secondary {
+  grid-template-columns: 1fr 1fr;
+}
+
+h1,
+h2 {
+  margin: 0 0 10px;
+}
+
+h2 {
+  font-size: 1.05rem;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.inline-row {
+  display: flex;
+  gap: 8px;
+}
+
+.inline-row.wrap {
+  flex-wrap: wrap;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: transparent;
+  color: inherit;
+}
+
+button {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover {
+  border-color: var(--brand);
+}
+
+.info-line {
+  margin: 8px 0 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: grid;
+  gap: 8px;
+}
+
+.item {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.item.done .title {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.item-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+  font-weight: 700;
+}
+
+.badge {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.log {
+  margin: 0;
+  min-height: 180px;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  overflow: auto;
+  background: #fcfdff;
+}
+
+.tip-ok {
+  color: var(--ok);
+}
+
+.tip-warn {
+  color: var(--warn);
+}
+
+.tip-danger {
+  color: var(--danger);
+}
+
+@media (max-width: 940px) {
+  .grid,
+  .grid.secondary {
+    grid-template-columns: 1fr;
+  }
+}

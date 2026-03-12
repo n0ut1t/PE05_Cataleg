@@ -1,0 +1,1 @@
+aixo no es JSON valid i provocarà un SyntaxError quan fem response.json()

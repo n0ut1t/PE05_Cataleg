@@ -1,0 +1,1 @@
+aixo no es JSON valid; response.json() fallarà en el parseig

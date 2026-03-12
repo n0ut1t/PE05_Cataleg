@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo didàctica: Events, patrons i delegació</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="panel hero">
+        <h1>Demo didàctica: Events, patrons i delegació</h1>
+        <p>
+          Objectiu: entendre <strong>quin event usar</strong>, aplicar <strong>setState</strong>
+          com a porta única i evitar listeners “perduts” amb <strong>delegació</strong>.
+        </p>
+      </header>
+
+      <section class="grid">
+        <article class="panel">
+          <h2>1) Quin event quan?</h2>
+
+          <div class="field">
+            <label for="persistMode">Persistir el camp amb event</label>
+            <select id="persistMode">
+              <option value="change">change (més econòmic)</option>
+              <option value="input">input (molt freqüent)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="nicknameInput">Nom visible (prova input vs change)</label>
+            <input id="nicknameInput" type="text" placeholder="Escriu un nom" />
+          </div>
+
+          <div class="field">
+            <label for="topicSelect">Tema preferit (change)</label>
+            <select id="topicSelect">
+              <option value="Asincronia">Asincronia</option>
+              <option value="UI States">UI States</option>
+              <option value="Persistència">Persistència</option>
+              <option value="Events">Events</option>
+            </select>
+          </div>
+
+          <form id="addForm" class="field">
+            <label for="addInput">Afegir element (submit)</label>
+            <div class="inline-row">
+              <input id="addInput" type="text" placeholder="Nou element" />
+              <button type="submit">Afegir</button>
+            </div>
+          </form>
+
+          <div class="inline-row wrap">
+            <button id="btnResetWrites" type="button">Reset comptador d'escriptures</button>
+            <button id="btnClearLog" type="button">Netejar log d'events</button>
+          </div>
+
+          <p id="persistInfo" class="info-line"></p>
+        </article>
+
+        <article class="panel">
+          <h2>2) Delegació d'events vs listeners directes</h2>
+
+          <div class="field">
+            <label for="patternMode">Patró de clicks a la llista</label>
+            <select id="patternMode">
+              <option value="delegation">Delegació (recomanat)</option>
+              <option value="direct">Directe fràgil (error típic)</option>
+            </select>
+          </div>
+
+          <div class="inline-row wrap">
+            <button id="btnAll" type="button">Tots</button>
+            <button id="btnPending" type="button">Pendents</button>
+            <button id="btnDone" type="button">Fets</button>
+            <button id="btnRerender" type="button">Forçar re-render</button>
+            <button id="btnRebind" type="button">Reactivar listeners directes</button>
+          </div>
+
+          <p id="patternInfo" class="info-line"></p>
+          <ul id="listEl" class="list" aria-live="polite"></ul>
+        </article>
+      </section>
+
+      <section class="grid secondary">
+        <article class="panel">
+          <h2>Log d'events</h2>
+          <pre id="eventLog" class="log"></pre>
+        </article>
+
+        <article class="panel">
+          <h2>Debug de l'estat</h2>
+          <pre id="stateDump" class="log"></pre>
+        </article>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

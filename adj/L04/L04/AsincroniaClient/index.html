@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo fetch asíncron</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Mini demo: fetch + async/await</h1>
+      <p class="subtitle">
+        Exemple educatiu per veure com tractar càrrega, èxit i errors (HTTP,
+        parseig JSON i xarxa).
+      </p>
+
+      <section class="panel controls">
+        <h2>Escenaris</h2>
+        <div class="buttons">
+          <button data-scenario="ok">1) Èxit</button>
+          <button data-scenario="http">2) Error HTTP (404)</button>
+          <button data-scenario="json">3) JSON mal format</button>
+          <button data-scenario="network">4) Error de xarxa</button>
+        </div>
+        <p class="tip">
+          Consell docent: prova els quatre botons i observa el missatge d’estat
+          i la consola del navegador.
+        </p>
+      </section>
+
+      <section class="panel output">
+        <h2>Resultat UI</h2>
+        <p id="status" class="status idle">Esperant acció...</p>
+        <pre id="result" class="result" aria-live="polite"></pre>
+      </section>
+
+      <section class="panel notes">
+        <h2>Què estem practicant?</h2>
+        <ul>
+          <li>Mostrar estat de càrrega per no “bloquejar” la UX.</li>
+          <li>Comprovar <strong>response.ok</strong> abans de parsejar JSON.</li>
+          <li>Fer <strong>try/catch</strong> per capturar errors reals.</li>
+          <li>Donar missatge clar a l’usuari i no deixar la UI en blanc.</li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

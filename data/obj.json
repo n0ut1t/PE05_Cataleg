@@ -1,0 +1,229 @@
+{
+  "inventory": [
+    {
+      "id": "cns_001",
+      "name": "Bebida Energética",
+      "category": "consumible",
+      "rarity": "común",
+      "level_req": 1,
+      "price": 120,
+      "description": "Recupera 50 HP. Sabe a rayos, pero te mantiene despierto."
+    },
+    {
+      "id": "cns_002",
+      "name": "Café de Especialidad",
+      "category": "consumible",
+      "rarity": "poco común",
+      "level_req": 5,
+      "price": 350,
+      "description": "Recupera 30 SP. Preparado por un barista experto."
+    },
+    {
+      "id": "cns_003",
+      "name": "Botiquín Táctico",
+      "category": "consumible",
+      "rarity": "raro",
+      "level_req": 10,
+      "price": 800,
+      "description": "Cura todos los estados alterados y recupera 150 HP."
+    },
+    {
+      "id": "cns_004",
+      "name": "Desfibrilador Portátil",
+      "category": "consumible",
+      "rarity": "épico",
+      "level_req": 15,
+      "price": 2500,
+      "description": "Revive a un aliado caído con el 50% de HP."
+    },
+    {
+      "id": "cns_005",
+      "name": "Chicle de Menta",
+      "category": "consumible",
+      "rarity": "común",
+      "level_req": 1,
+      "price": 20,
+      "description": "Cura el estado 'Confusión'."
+    },
+    {
+      "id": "wpn_001",
+      "name": "Bate de Aluminio",
+      "category": "arma",
+      "rarity": "común",
+      "level_req": 2,
+      "price": 450,
+      "description": "Ligero y contundente. Un clásico de las peleas callejeras."
+    },
+    {
+      "id": "wpn_002",
+      "name": "Katana de Imitación",
+      "category": "arma",
+      "rarity": "poco común",
+      "level_req": 6,
+      "price": 1200,
+      "description": "Comprada en una convención, pero sorprendentemente afilada."
+    },
+    {
+      "id": "wpn_003",
+      "name": "Nudilleras de Acero",
+      "category": "arma",
+      "rarity": "poco común",
+      "level_req": 8,
+      "price": 950,
+      "description": "Perfectas para el combate cuerpo a cuerpo."
+    },
+    {
+      "id": "wpn_004",
+      "name": "Tubo de Plomo",
+      "category": "arma",
+      "rarity": "común",
+      "level_req": 3,
+      "price": 300,
+      "description": "Encontrado en un callejón. Muy pesado y lento."
+    },
+    {
+      "id": "wpn_005",
+      "name": "Pistola de Airsoft Modificada",
+      "category": "arma",
+      "rarity": "raro",
+      "level_req": 12,
+      "price": 3200,
+      "description": "Dispara proyectiles elementales a alta velocidad."
+    },
+    {
+      "id": "wpn_006",
+      "name": "Megáfono Pesado",
+      "category": "arma",
+      "rarity": "raro",
+      "level_req": 14,
+      "price": 2800,
+      "description": "Aumenta el daño de los ataques basados en sonido."
+    },
+    {
+      "id": "wpn_007",
+      "name": "Cuchillo Mariposa",
+      "category": "arma",
+      "rarity": "poco común",
+      "level_req": 9,
+      "price": 1500,
+      "description": "Requiere destreza para usarlo sin cortarse los dedos."
+    },
+    {
+      "id": "wpn_008",
+      "name": "Espada de Neón",
+      "category": "arma",
+      "rarity": "épico",
+      "level_req": 20,
+      "price": 8500,
+      "description": "Brilla en la oscuridad y corta el metal como si fuera mantequilla."
+    },
+    {
+      "id": "arm_001",
+      "name": "Uniforme Escolar de Invierno",
+      "category": "armadura",
+      "rarity": "común",
+      "level_req": 1,
+      "price": 500,
+      "description": "Ropa estándar. No protege mucho, pero abriga."
+    },
+    {
+      "id": "arm_002",
+      "name": "Chaqueta de Cuero",
+      "category": "armadura",
+      "rarity": "poco común",
+      "level_req": 5,
+      "price": 1800,
+      "description": "Te da un aire rebelde y resiste cortes superficiales."
+    },
+    {
+      "id": "arm_003",
+      "name": "Chaleco Antibalas Ligero",
+      "category": "armadura",
+      "rarity": "raro",
+      "level_req": 15,
+      "price": 5000,
+      "description": "Protección policial estándar. Reduce el daño físico."
+    },
+    {
+      "id": "arm_004",
+      "name": "Zapatillas de Marca Limitada",
+      "category": "armadura",
+      "rarity": "raro",
+      "level_req": 12,
+      "price": 3500,
+      "description": "Aumentan drásticamente tu agilidad e índice de evasión."
+    },
+    {
+      "id": "arm_005",
+      "name": "Gafas de Sol de Diseño",
+      "category": "armadura",
+      "rarity": "poco común",
+      "level_req": 7,
+      "price": 900,
+      "description": "Inmunidad al estado 'Ceguera'."
+    },
+    {
+      "id": "arm_006",
+      "name": "Mochila Resistente",
+      "category": "armadura",
+      "rarity": "común",
+      "level_req": 3,
+      "price": 600,
+      "description": "Añade un poco de defensa extra en la espalda."
+    },
+    {
+      "id": "arm_007",
+      "name": "Abrigo Largo Negro",
+      "category": "armadura",
+      "rarity": "épico",
+      "level_req": 22,
+      "price": 9900,
+      "description": "Muy peliculero. Aumenta la resistencia al daño mágico."
+    },
+    {
+      "id": "mat_001",
+      "name": "Materia Oscura Condensada",
+      "category": "material",
+      "rarity": "épico",
+      "level_req": 1,
+      "price": 10000,
+      "description": "Palpita de forma siniestra. Útil para craftear armas de alto nivel."
+    },
+    {
+      "id": "mat_002",
+      "name": "Chip de Memoria Roto",
+      "category": "material",
+      "rarity": "común",
+      "level_req": 1,
+      "price": 50,
+      "description": "Basura electrónica. Quizás alguien pague algo por los componentes."
+    },
+    {
+      "id": "mat_003",
+      "name": "Pase de Metro VIP",
+      "category": "material",
+      "rarity": "raro",
+      "level_req": 1,
+      "price": 0,
+      "description": "Objeto clave. Permite acceder a las profundidades del palacio del metro."
+    },
+    {
+      "id": "mat_004",
+      "name": "Engranaje Oxidado",
+      "category": "material",
+      "rarity": "común",
+      "level_req": 1,
+      "price": 15,
+      "description": "Un simple engranaje antiguo."
+    },
+    {
+      "id": "mat_005",
+      "name": "Apuntes de Matemáticas",
+      "category": "material",
+      "rarity": "legendario",
+      "level_req": 50,
+      "price": 99999,
+      "description": "Tienen las respuestas del examen final. Su valor es incalculable."
+    }
+  ]
+}

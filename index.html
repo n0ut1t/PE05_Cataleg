@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gestor de Notes</title>
+
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(180deg, #0b0d0f 0%, #181a1c 100%);
+        font-family: Arial, Helvetica, sans-serif;
+        color: #e6eef6;
+      }
+      .form_section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 1rem;
+      }
+      form {
+        width: 360px;
+        max-width: 100%;
+        padding: 20px;
+        background: #2b2f33;
+        border-radius: 8px;
+        box-shadow: 0 6px 22px rgba(0, 0, 0, 0.6);
+        color: #eef1f5;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 600;
+        color: #e6eef6;
+      }
+      input {
+        width: 100%;
+        padding: 8px 10px;
+        margin-bottom: 12px;
+        border: 1px solid #44484c;
+        border-radius: 4px;
+        box-sizing: border-box;
+        background: #202326;
+        color: #eef1f5;
+      }
+      input::placeholder {
+        color: #9aa1a8;
+      }
+      button {
+        width: 100%;
+        padding: 10px 12px;
+        border: none;
+        border-radius: 4px;
+        background: #0a84ff;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+      /* status text */
+      .estat_ok {
+        color: green;
+      }
+      .estat_info {
+        color: blue;
+      }
+      .estat_error {
+        color: red;
+      }
+      .ocult {
+        display: none;
+      }
+
+      /* Clase base para el elemento con animación hover */
+      .animacion-hover {
+        /* Establece una transición suave para propiedades como transform y opacity */
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      /* Estilo al pasar el cursor (hover) */
+      .animacion-hover:hover {
+        /* Escala el elemento ligeramente */
+        transform: scale(1.1);
+        /* Reduce la opacidad para efecto de transparencia */
+        opacity: 0.85;
+        /* Puedes añadir sombras o cambios de color */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      /* ========== ESTILOS PERFIL ========== */
+      
+      /* seccion del perfil */
+      #profile_section {
+        padding: 20px;
+        width: 100%;
+        max-width: 1100px;
+      }
+      
+      /* cabecera del usuario - tarjeta guay con gradiente */
+      .user-card {
+        background: linear-gradient(135deg, #2b2f33 0%, #1a1d20 100%);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border: 1px solid #3a3f44;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      
+      /* avatar circular con inicial */
+      .user-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
+        flex-shrink: 0;
+      }
+      
+      /* colores segun rol */
+      .user-avatar.docent { background: linear-gradient(135deg, #0a84ff 0%, #0066cc 100%); }
+      .user-avatar.alumne { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+      .user-avatar.familia { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+      
+      .user-info h2 {
+        margin: 0 0 5px 0;
+        font-size: 22px;
+      }
+      
+      .user-info p {
+        margin: 3px 0;
+        color: #9aa1a8;
+        font-size: 14px;
+      }
+      
+      .rol-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-top: 8px;
+      }
+      
+      .rol-badge.docent { background: rgba(10, 132, 255, 0.2); color: #4dabff; }
+      .rol-badge.alumne { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+      .rol-badge.familia { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+      
+      /* ========== ESTILOS DOCENT ========== */
+      
+      /* contenedor principal - dos columnas */
+      .docent-container {
+        display: flex;
+        gap: 20px;
+      }
+      
+      /* lista de alumnos */
+      #container_alumnes {
+        flex: 1;
+        background: linear-gradient(180deg, #2b2f33 0%, #22262a 100%);
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid #3a3f44;
+        overflow: hidden;
+      }
+      
+      #container_alumnes h3 {
+        margin: 0 0 15px 0;
+        font-size: 16px;
+        color: #9aa1a8;
+      }
+      
+      #container_alumnes ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      /* cada alumno como tarjeta con efecto brillo */
+      #container_alumnes .animacion-hover {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 14px 16px;
+        background: #3a3f44;
+        border-radius: 8px;
+        border-left: 4px solid #0a84ff;
+        text-align: left;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      #container_alumnes .animacion-hover::before {
+        content: "🎓";
+        font-size: 18px;
+      }
+      
+      #container_alumnes .animacion-hover:hover {
+        background: linear-gradient(90deg, #454a50 0%, #3a3f44 100%);
+        border-left-color: #4dabff;
+        transform: translateX(8px) scale(1.02);
+        opacity: 1;
+        box-shadow: 0 4px 12px rgba(10, 132, 255, 0.15);
+      }
+      
+      /* panel donde se muestran las notas */
+      #docent_render {
+        flex: 1.2;
+        background: linear-gradient(180deg, #2b2f33 0%, #22262a 100%);
+        border-radius: 12px;
+        padding: 20px;
+        min-height: 250px;
+        list-style: none;
+        border: 1px solid #3a3f44;
+        transition: all 0.3s ease;
+      }
+      
+      #docent_render:empty::before {
+        content: "👆 Clica en un alumne per veure les seves notes";
+        color: #6b7280;
+        font-style: italic;
+        display: block;
+        text-align: center;
+        padding-top: 80px;
+      }
+      
+      #docent_render li {
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        background: #3a3f44;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: transform 0.2s ease;
+      }
+      
+      #docent_render li:hover {
+        transform: translateX(5px);
+      }
+      
+      /* ========== ESTILOS ESTADISTICAS (para alumne/familia) ========== */
+      
+      .stats-box {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin: 15px 0;
+      }
+      
+      .stat-item {
+        background: #3a3f44;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+      }
+      
+      .stat-item .valor {
+        font-size: 24px;
+        font-weight: bold;
+        color: #0a84ff;
+      }
+      
+      .stat-item .label {
+        font-size: 12px;
+        color: #9aa1a8;
+        margin-top: 4px;
+      }
+      
+      /* lista de notas para alumne */
+      .notas-lista {
+        list-style: none;
+        padding: 0;
+      }
+      
+      .notas-lista li {
+        padding: 12px 15px;
+        margin-bottom: 8px;
+        background: #3a3f44;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        border-left: 4px solid #0a84ff;
+      }
+      
+      .notas-lista li.aprobada { border-left-color: #10b981; }
+      .notas-lista li.suspendida { border-left-color: #ef4444; }
+      
+      /* ========== LOGOUT BOTON ========== */
+      #logout_section {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        z-index: 100;
+      }
+      
+      #logout_section form,
+      #btn_logout {
+        width: auto;
+        display: inline-block;
+        padding: 0;
+        background: none;
+        box-shadow: none;
+      }
+      
+      #logout_section button {
+        width: auto;
+        padding: 10px 18px;
+        background: linear-gradient(135deg, #ff4757 0%, #c0392b 100%);
+        font-size: 14px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+      
+      #logout_section button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+      }
+      
+      /* ========== ALERTAS Y MENSAJES ========== */
+      .alerta {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .alerta-error {
+        background: rgba(239, 68, 68, 0.15);
+        color: #f87171;
+        border-left: 4px solid #ef4444;
+      }
+      
+      .alerta-warning {
+        background: rgba(245, 158, 11, 0.15);
+        color: #fbbf24;
+        border-left: 4px solid #f59e0b;
+      }
+      
+      .alerta-info {
+        background: rgba(59, 130, 246, 0.15);
+        color: #60a5fa;
+        border-left: 4px solid #3b82f6;
+      }
+      
+      /* alertas pequeñas para el panel docent */
+      .alerta-mini {
+        font-size: 12px;
+        padding: 8px 12px;
+        background: rgba(245, 158, 11, 0.1);
+        border-radius: 6px;
+        margin-bottom: 8px;
+        color: #fbbf24;
+      }
+      
+      .alerta-mini.error {
+        background: rgba(239, 68, 68, 0.1);
+        color: #f87171;
+      }
+      
+      /* ========== RECOMENDACIONES ========== */
+      .recomendacion {
+        padding: 12px 16px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        font-size: 14px;
+        background: rgba(16, 185, 129, 0.1);
+        color: #34d399;
+        border-left: 4px solid #10b981;
+      }
+      
+      /* ========== BADGES ACADEMICOS ========== */
+      .badge-academic {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 10px;
+      }
+      
+      .badge-oro {
+        background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+        color: #1a1d20;
+      }
+      
+      .badge-verde {
+        background: rgba(16, 185, 129, 0.2);
+        color: #34d399;
+      }
+      
+      .badge-azul {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+      }
+      
+      .badge-rojo {
+        background: rgba(239, 68, 68, 0.2);
+        color: #f87171;
+      }
+      
+      .badge-gris {
+        background: rgba(156, 163, 175, 0.2);
+        color: #9ca3af;
+      }
+      
+      /* badge en lista de alumnos (docent) */
+      .alumne-badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 10px;
+        margin-right: 5px;
+      }
+      
+      /* header del alumno en panel docent */
+      .alumno-header {
+        background: linear-gradient(135deg, #2b2f33 0%, #1a1d20 100%) !important;
+        border-left-color: #0a84ff !important;
+        font-size: 15px;
+        margin-bottom: 12px !important;
+      }
+      
+      /* tarjeta info alumno (familia) */
+      .alumno-info-card {
+        background: linear-gradient(135deg, #2b2f33 0%, #1a1d20 100%);
+        border-radius: 12px;
+        padding: 15px 20px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid #3a3f44;
+      }
+      
+      .alumno-info-card h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="logout_section">
+      <form id="btn_logout">
+        <button type="submit">Tancar sessio</button>
+      </form>
+    </section>
+    <section id="form_section" class="form_section">
+      <form id="form">
+        <div>
+          <label for="username">Introdueix el nom d'usuari</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="username....."
+          />
+        </div>
+        <div>
+          <label for="password">Introdueix la teva contrasenya</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="password....."
+          />
+        </div>
+
+        <button id="button_iniciar_sesion" type="submit">Iniciar Sesio</button>
+      </form>
+      <div>
+        <p id="status" class="estat_info">
+          Introdueix el teu usuari i contrasenya per iniciar sessió.
+        </p>
+      </div>
+    </section>
+    <section id="profile_section">
+      <div id="perfil"></div>
+    </section>
+    <script type="module" src="PE04_App.js"></script>
+  </body>
+</html>

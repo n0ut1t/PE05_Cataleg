@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo UI States</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Mini demo: UI States</h1>
+      <p class="subtitle">
+        La interfície també té estat: <strong>idle</strong>, <strong>loading</strong>,
+        <strong>ready</strong>, <strong>empty</strong> i <strong>error</strong>.
+      </p>
+
+      <section class="panel controls">
+        <h2>Escenaris per provar</h2>
+        <div class="buttons">
+          <button data-scenario="ready">1) Dades correctes (ready)</button>
+          <button data-scenario="empty">2) Sense dades (empty)</button>
+          <button data-scenario="http">3) Error HTTP (404)</button>
+          <button data-scenario="json">4) JSON invàlid</button>
+          <button data-scenario="network">5) Error de xarxa</button>
+          <button data-scenario="idle">6) Tornar a idle</button>
+        </div>
+        <p class="tip">
+          Objectiu docent: entendre que el render no depèn d’ifs dispersos, sinó d’un
+          únic <em>status</em> central.
+        </p>
+      </section>
+
+      <section class="panel">
+        <h2>Render de la UI</h2>
+        <p id="statusBadge" class="status-badge">status: idle</p>
+        <div id="view" class="view" aria-live="polite"></div>
+      </section>
+
+      <section class="panel notes">
+        <h2>Missatge clau</h2>
+        <ul>
+          <li>Una UI madura sempre explica què està passant.</li>
+          <li>Si no hi ha dades, també és un estat vàlid: <strong>empty</strong>.</li>
+          <li>En error, mostra un missatge útil (no una pantalla en blanc).</li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

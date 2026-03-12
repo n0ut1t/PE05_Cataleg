@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo didàctica CSS 2/3</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="panel hero">
+        <h1>Demo didàctica: Fulles d'estil CSS (2/3)</h1>
+        <p>
+          Objectiu de sessió: consistència visual amb sistema d'espaiat, layout coherent,
+          variants de botó, focus visible i responsive mínim.
+        </p>
+      </header>
+
+      <section class="grid">
+        <article class="panel">
+          <h2>1) Objectius</h2>
+          <ul class="checklist" id="checkList">
+            <li data-check="spacing">Variables d'espaiat <code>--s-1/2/3</code></li>
+            <li data-check="container">Classe <code>.container</code> amb <code>gap</code> coherent</li>
+            <li data-check="variants">Variants <code>.btn-primary</code> / <code>.btn-secondary</code> / <code>.btn-danger</code></li>
+            <li data-check="focus">Focus visible en botons i inputs</li>
+            <li data-check="responsive">Responsive mínim per layout i botons</li>
+          </ul>
+
+          <div class="field">
+            <label for="scaleSelect">Escala d'espaiat demo</label>
+            <select id="scaleSelect" class="input">
+              <option value="base">Base (8/16/24)</option>
+              <option value="compacta">Compacta (6/12/18)</option>
+              <option value="ampla">Ampla (10/20/30)</option>
+            </select>
+          </div>
+
+          <p class="muted" id="statusLine"></p>
+        </article>
+
+        <article class="panel">
+          <h2>2) Snippet d'espaiat</h2>
+          <pre class="code">:root {
+  --s-1: 8px;
+  --s-2: 16px;
+  --s-3: 24px;
+}
+
+.container {
+  width: min(1000px, 92vw);
+  margin: 0 auto;
+  padding: var(--s-3);
+  display: grid;
+  gap: var(--s-3);
+}</pre>
+
+          <h2>3) Snippet de variants</h2>
+          <pre class="code">.btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.btn-primary { background: var(--accent); color: #fff; border: 0; }
+.btn-secondary { background: transparent; color: var(--text); border: 2px solid var(--border); }
+.btn-danger { background: var(--danger); color: #fff; border: 0; }</pre>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2>4) Playground UI</h2>
+        <p class="muted">
+          Prova tabulador i mida de finestra per verificar focus i responsive.
+        </p>
+
+        <div class="playground">
+          <div class="field">
+            <label for="demoInput">Input de prova</label>
+            <input id="demoInput" class="input" type="text" placeholder="Escriu aquí" />
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" type="button">Guardar</button>
+            <button class="btn btn-secondary" type="button">Cancel·lar</button>
+            <button class="btn btn-danger" type="button">Esborrar</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="panel">
+          <h2>5) Focus + responsive (snippet)</h2>
+          <pre class="code">.btn:focus-visible,
+.input:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 60%, white);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+  .actions .btn { width: 100%; }
+}</pre>
+        </article>
+
+        <article class="panel">
+          <h2>Overview (5 checks)</h2>
+          <ul class="overview" id="overviewList"></ul>
+        </article>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
