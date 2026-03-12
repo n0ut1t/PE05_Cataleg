@@ -3,10 +3,13 @@ mi idea es hacer un menu de inventario jrpg rollo PERSONA. ya que los menus de p
 como no tengo esa capacidad de arte, como ahora estoy jugando mewgenics y tiene una gesiton de inventario con un estilo interesante tipo caja alomejor cojo algo de hay.
 
 -- PUNTOS OBLIGATORIOS
+
     -1 Datos, json y fetch
         Ya que estoy haciendo un inventario/menu es facil, los datos van a ser objetos, personajes, ... cosas tipicas de un jrpg
+    
     -2 UI estates
         puedo simular estados como antes de entrar al menu, que haya una animacion como si estubiera cargando, mensajes de errores si pongo un buscador de items y eso, hay tambien puedo         simular un tiempo de respuesta
+
     -3 Interaccions
         - almenos 1 input text
         - 1 select o toggle (categoria,rareza,estado,orden)

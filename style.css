@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+:root{
+  --font-size: 16px;
+  --background: #555454;
+  --panel: #B381FA;
+  --font: "Chakra Petch", sans-serif;
+  --wait: #AF0502;
+  --ok: #62D095;
+}
+body{
+  background-color: var(--background);
+  font-family: var(--font);
+}
+.loading{
+  color: var(--wait)
+}
+
+.ok{
+  color: var(--ok);
+}
+
+.form_pre{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.load{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.load p{
+  position: absolute;
+  font-family: var(--font);
+  margin: 0;                
+  padding-bottom: 200px;
+}
+.load img{
+  max-width: 100%;
+  height: auto;
+}
+
+.panel{
+  background-color: var(--panel); 
+  border-radius: 20px;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;   
+  justify-content: center;  
+  align-items: center;      
+  gap: 15px;                
+  
+  width: 450px; 
+  height: 280px;
+}
+
+.panel-title {
+  margin: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(0, 0, 0, 0.7);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+  text-align: center;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+/* Layout del Formulario */
+.pref-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espacio entre filas */
+}
+
+/* Cada fila de ajuste (Label + Input) */
+.pref-form div {
+  display: flex;
+  justify-content: space-between; /* Texto a la izquierda, control a la derecha */
+  align-items: center;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.1); /* Fondo sutil para la fila */
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.pref-form div:hover {
+  background: rgba(255, 255, 255, 0.2); /* Efecto al pasar el ratón */
+}
+
+/* Estilo de los Labels */
+.pref-form label {
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+/* Estilo para el Select y otros inputs */
+.pref-form select, 
+.pref-form input[type="range"] {
+  cursor: pointer;
+  font-family: var(--font);
+  border: none;
+  background: white;
+  border-radius: 4px;
+  padding: 2px 5px;
+}
+
+/* Estilo específico para el checkbox (más grande) */
+.pref-form input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--ok); /* Color verde cuando está marcado */
+}
+
+/* Estilo para el valor del rango (el span) */
+#fontValue {
+  font-weight: bold;
+  margin-left: 5px;
+  min-width: 40px;
+  display: inline-block;
+}
