@@ -11,33 +11,42 @@
       <header>
 
       </header>
+
       <section id="form_preferencias" class="form_pre">
         <div class="panel">
           <p class="panel-titles">Preferences<p>
-          <form class="pref-form">
+          <form class="pref-form" id="form_pref">
             <div>
               <label for="theme">theme</label>
-              <select name="theme">
+              <select id="theme" name="theme">
+                <option value="dark" selected>dark</option>
                 <option value="light">light</option>
-                <option value="dark">dark</option>
               </select>
             </div>
             <div>
               <label for="fontRange">Mida font</label>
-              <input id="fontRange" type="range" min="90" max="120" step="5" />
+              <input id="fontRange" type="range" min="9" max="100" step="2" />
               <span id="fontValue"></span>
             </div>
             <div>
               <label for="reduce">Reduce motions</label>
-              <input name="reduce" type="checkbox">
+              <input id="reduce" name="reduce" type="checkbox">
             </div>
+            <button id="form_btn">Save preferences</button>
           </form>
         </div>
       </section>
+
       <section id="loading" class="load">
         <div class="panel">
           <p id="loading_msg"></p>
           <img src="./public/blendertimer-load-38_256.gif">
+        </div>
+      </section>
+
+      <section id="menu">
+        <div id="opciones">
+          <p style="cursor: pointer;">Inventari</p>
         </div>
       </section>
     </main>

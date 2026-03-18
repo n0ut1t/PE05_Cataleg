@@ -1,15 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 :root{
-  --font-size: 16px;
   --background: #555454;
   --panel: #B381FA;
   --font: "Chakra Petch", sans-serif;
+  --font-size: 13px;
   --wait: #AF0502;
-  --ok: #62D095;
+  --ok: #00D777;
+  --error: #FF012D;
 }
 body{
   background-color: var(--background);
   font-family: var(--font);
+}
+p{
+  font-size: var(--font-size);
 }
 .loading{
   color: var(--wait)
@@ -17,6 +21,10 @@ body{
 
 .ok{
   color: var(--ok);
+}
+
+.error{
+  color: var(--error);
 }
 
 .form_pre{
@@ -71,37 +79,33 @@ body{
   margin-bottom: 10px;
 }
 
-/* Layout del Formulario */
 .pref-form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Espacio entre filas */
+  gap: 15px;
 }
 
-/* Cada fila de ajuste (Label + Input) */
 .pref-form div {
   display: flex;
-  justify-content: space-between; /* Texto a la izquierda, control a la derecha */
+  justify-content: space-between; 
   align-items: center;
   padding: 5px 10px;
-  background: rgba(255, 255, 255, 0.1); /* Fondo sutil para la fila */
+  background: rgba(255, 255, 255, 0.1); 
   border-radius: 8px;
   transition: background 0.3s;
 }
 
 .pref-form div:hover {
-  background: rgba(255, 255, 255, 0.2); /* Efecto al pasar el ratón */
+  background: rgba(255, 255, 255, 0.2);
 }
 
-/* Estilo de los Labels */
 .pref-form label {
   font-weight: 500;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: var(--font-size);
 }
 
-/* Estilo para el Select y otros inputs */
 .pref-form select, 
 .pref-form input[type="range"] {
   cursor: pointer;
@@ -112,17 +116,19 @@ body{
   padding: 2px 5px;
 }
 
-/* Estilo específico para el checkbox (más grande) */
 .pref-form input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: var(--ok); /* Color verde cuando está marcado */
+  accent-color: var(--ok)
 }
 
-/* Estilo para el valor del rango (el span) */
 #fontValue {
   font-weight: bold;
   margin-left: 5px;
   min-width: 40px;
   display: inline-block;
+}
+
+[hidden] {
+  display: none !important;
 }
