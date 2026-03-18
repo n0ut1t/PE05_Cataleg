@@ -25,7 +25,7 @@
             </div>
             <div>
               <label for="fontRange">Mida font</label>
-              <input id="fontRange" type="range" min="9" max="100" step="2" />
+              <input id="fontRange" type="range" min="13" max="36" step="1" />
               <span id="fontValue"></span>
             </div>
             <div>
@@ -44,9 +44,22 @@
         </div>
       </section>
 
-      <section id="menu">
-        <div id="opciones">
-          <p style="cursor: pointer;">Inventari</p>
+      <section id="menu" class="inventory-section" hidden>
+        <div class="inventory-header">
+          <h2>Inventario</h2>
+          <div class="inventory-controls">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre..." />
+            <select id="categoryFilter">
+              <option value="todos">Todos</option>
+              <option value="consumible">Consumibles</option>
+              <option value="arma">Armas</option>
+              <option value="armadura">Armaduras</option>
+              <option value="material">Materiales</option>
+            </select>
+          </div>
+        </div>
+        <div class="inventory-grid" id="inventoryGrid">
+          <!-- Items renderizados por JS se inyectarán aquí -->
         </div>
       </section>
     </main>
