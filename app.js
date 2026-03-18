@@ -1,197 +1,266 @@
-const THEME_KEY = "pe05.theme.v1";
-const FONT_KEY = "pe05.font.v1";
-const MOTION_KEY = "pe05.motion.v1";
-const FAV_KEY = "pe05.favorites.v1";
+// ==========================================
+// keys versionades
+// ==========================================
+const THEME_KEY = "0612.pe05.theme.v1";
+const FONT_KEY = "0612.pe05.font.v1";
+const MOTION_KEY = "0612.pe05.motion.v1";
+const FAV_KEY = "0612.pe05.favorites.v1";
+const CUSTOM_KEY = "0612.pe05.customs.v1"; // Guardar apart els items custom
+const DB_LOAD = "./data/obj.json";
 
-const section_load = document.getElementById('loading');
-const loading_msg = document.getElementById('loading_msg');
-const section_pref = document.getElementById('form_preferencias');
-const form = document.getElementById('form_pref');
-
-const section_menu = document.getElementById('menu');
-const inventoryGrid = document.getElementById('inventoryGrid');
-const searchInput = document.getElementById('searchInput');
-const categoryFilter = document.getElementById('categoryFilter');
-
-const ui = {
+const DOM = {
+  // Seccions de l'App
+  secPref: document.getElementById('form_preferencias'),
+  secLoad: document.getElementById('loading'),
+  secMenu: document.getElementById('menu'),
+  secAddItem: document.getElementById('add_item_section'),
+  
+  // Formulari Preferències
+  formPref: document.getElementById('form_pref'),
   themeSelect: document.getElementById("theme"),
   fontRange: document.getElementById("fontRange"),
+  fontValue: document.getElementById("fontValue"),
   reduceMotion: document.getElementById("reduce"),
+  
+  // UI Càrrega i Error
+  loadingMsg: document.getElementById('loading_msg'),
+  loadingSpinner: document.getElementById('loading_spinner'),
+  btnRetry: document.getElementById('btn_retry'),
+  
+  // UI Inventari Global
+  inventoryGrid: document.getElementById('inventoryGrid'),
+  searchInput: document.getElementById('searchInput'),
+  categoryFilter: document.getElementById('categoryFilter'),
+  btnShowAdd: document.getElementById('btn_show_add'),
+  
+  // Formulari Crear Item 
+  formAdd: document.getElementById('form_add'),
+  btnCancelAdd: document.getElementById('btn_cancel_add')
 };
 
+// ==========================================
+// STATE VARIABLES
+// ==========================================
 let globalItems = [];
 let favoriteItems = [];
+let customItems = [];
 
-try {
-  const storedFavs = localStorage.getItem(FAV_KEY);
-  if (storedFavs) favoriteItems = JSON.parse(storedFavs);
-} catch(e) {
-  console.warn("Corrupt favorite data in localStorage, resetting.");
-  favoriteItems = [];
+// ==========================================
+// 1. STORAGE
+// ==========================================
+function loadPersistedData() {
+  // Gestionar null i corrupció. validació d'estructura 
+  try {
+    const storedFavs = localStorage.getItem(FAV_KEY);
+    if (storedFavs) {
+      const parsed = JSON.parse(storedFavs);
+      // Validació que sigui un Array
+      favoriteItems = Array.isArray(parsed) ? parsed : [];
+    }
+  } catch(e) {
+    console.warn("Dades de favorits corruptes a localStorage, resetejant fallback.");
+    favoriteItems = []; 
+  }
+
+  try {
+    const storedCustoms = localStorage.getItem(CUSTOM_KEY);
+    if (storedCustoms) {
+      const parsed = JSON.parse(storedCustoms);
+      customItems = Array.isArray(parsed) ? parsed : [];
+    }
+  } catch(e) {
+    console.warn("Dades de customs corruptes a localStorage, resetejant fallback.");
+    customItems = [];
+  }
 }
 
-const applyPreferences = (theme, font, motion) => {
+function saveFavorites() {
+  localStorage.setItem(FAV_KEY, JSON.stringify(favoriteItems));
+}
+
+function saveCustoms() {
+  localStorage.setItem(CUSTOM_KEY, JSON.stringify(customItems));
+}
+
+// ==========================================
+// 2. PREFERENCES
+// ==========================================
+function applyPreferences(theme, font, motion) {
   const root = document.documentElement;
-  if (theme === 'light'){
-    root.style.setProperty("--background", "#FFFFFF");
+  // Aplica variables obligatòries 
+  if (theme === 'light') {
+    root.style.setProperty("--bg", "#FFFFFF");
+    root.style.setProperty("--text", "#333333");
   } else {
-    root.style.setProperty("--background", "#555454");
+    root.style.setProperty("--bg", "#555454");
+    root.style.setProperty("--text", "#FFFFFF");
   }
+  
   if (font) {
     root.style.setProperty("--font-size", font + "px");
+    if(DOM.fontValue) DOM.fontValue.innerText = font;
   }
+  
   if (motion === 'true') {
     root.classList.add('reduce-motion');
   } else {
     root.classList.remove('reduce-motion');
   }
-};
+}
 
-const checkPreferences = () => {
+function checkAndApplyPreferences() {
     const theme = localStorage.getItem(THEME_KEY);
     const font = localStorage.getItem(FONT_KEY);
     const motion = localStorage.getItem(MOTION_KEY);
 
-    if (theme && font && motion !== null) {
+    if (theme !== null && font !== null && motion !== null) {
+      DOM.themeSelect.value = theme;
+      DOM.fontRange.value = font;
+      DOM.reduceMotion.checked = (motion === 'true');
+      
       applyPreferences(theme, font, motion);
       return true;
     }
     return false;
-};
+}
 
-ui.themeSelect.addEventListener('change', () => {
-  applyPreferences(ui.themeSelect.value, ui.fontRange.value, ui.reduceMotion.checked.toString());
-});
-
-ui.fontRange.addEventListener("input", () => {
-  applyPreferences(ui.themeSelect.value, ui.fontRange.value, ui.reduceMotion.checked.toString());
-  document.getElementById("fontValue").innerText = ui.fontRange.value;
-});   
-
-const DB_LOAD = "./data/obj.json";
-
-async function load_db(db){
-  try{
-    const response = await fetch(db, {cache: "no-store"});
-    if (!response.ok) {throw new Error(`No s'ha pogut carregar el JSON (HTTP ${response.status})`)}
-    const data = await response.json();
-    if (!data || typeof data != "object") {throw new Error("JSON INVALID: no es un objecte")}
-    return data;
-  } catch (err) {
-    console.error(err);
-    throw err;
-  }
-}   
-
-async function startLoading() {
-  section_pref.hidden = true;
-  section_load.hidden = false;
-  section_menu.hidden = true;
-
+// ==========================================
+// 3. API (simulacio)
+// ==========================================
+async function fetchDatabase(url) {
+  // fetch, async/await, try/catch/finally, response.ok
+  let response = null;
   try {
-    const data = await load_items();
-    globalItems = data.inventory || [];
-    renderInventory(globalItems);
+    response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response.status}`);
+    }
     
-    await new Promise((resolve) => setTimeout(resolve,1000));
-    section_load.hidden = true;
-    section_menu.hidden = false;
-  } catch (error) {
-    console.error("Error en el proceso:", error);
-    loading_msg.textContent = "Error al cargar los datos.";
-    loading_msg.classList.add('error');
-    loading_msg.classList.remove('loading');
+    // Control error de parseig JSON 
+    const data = await response.json();
+    if (!data || typeof data !== "object") {
+      throw new Error("JSON invalid.");
+    }
+    
+    return data;
+    
+  } catch (err) {
+    console.error("Error durant la càrrega del JSON:", err);
+    throw err;
+  } finally {
+    //  Ús de finally per completar el flux o mostrar un missatge 
+    console.info(`Operació asíncrona fetch() a ${url} finalitzada.`);
   }
 }
 
-async function load_items() {
-  let db = await load_db(DB_LOAD);
+// ==========================================
+// 4. UI STATE LOGIC 
+// ==========================================
+async function startAppLoading() {
+  // Transició a estat Loading
+  DOM.secPref.hidden = true;
+  DOM.secLoad.hidden = false;
+  DOM.secMenu.hidden = true;
+  DOM.btnRetry.hidden = true; // botó de reintent per defecte
+  DOM.loadingSpinner.style.display = 'block';
+
   const mensajes = [
-    "Loading items...",
-    "Calculating power...",
-    "Looking for materia...",
-    "final touches..."
+    "Carregant...", 
+    "Calculant poder...",
+    "Buscant matèria...",
+    "Últims retocs..."
   ];
   let i = 0;
+  
+  DOM.loadingMsg.textContent = mensajes[0]; 
+  DOM.loadingMsg.className = 'loading'; 
+
+  // Iniciem l'interval
   const intervalid = setInterval(() => {
-    loading_msg.classList.add('loading');
-    loading_msg.textContent=mensajes[i % mensajes.length];
     i++;
+    DOM.loadingMsg.textContent = mensajes[i % mensajes.length];
   }, 1200);
 
-  // Simulate network wait as in original code
-  await new Promise((resolve) => setTimeout(resolve, 3500));
-  clearInterval(intervalid);
+  await new Promise(resolve => setTimeout(resolve, 3500));
 
-  loading_msg.classList.remove('loading');
-  loading_msg.classList.add('ok');
-  loading_msg.textContent = "Success, Welcome back!";
-  loading_msg.style.fontWeight = "bold";
+  try {
+    const data = await fetchDatabase(DB_LOAD);
+    
+    clearInterval(intervalid); // Netegem l'interval 
+    
+    // Integrarem els ítems custom creats junt als descarregats del json local
+    globalItems = [...(data.inventory || []), ...customItems];
+    
+    DOM.loadingMsg.textContent = "Èxit!";
+    DOM.loadingMsg.className = 'ok';
+    
+    // Mostrar aplicació principal preparant l'estat "Ready"
+    await new Promise(resolve => setTimeout(resolve, 500));
+    DOM.secLoad.hidden = true;
+    DOM.secMenu.hidden = false;
+    
+    renderInventory(globalItems);
 
-  return db;
+  } catch (error) {
+    clearInterval(intervalid); // Netegem l'interval en cas d'error
+    
+    // missatge + botó
+    DOM.loadingSpinner.style.display = 'none';
+    DOM.loadingMsg.textContent = "Error al carregar les dades.";
+    DOM.loadingMsg.className = 'error';
+    DOM.btnRetry.hidden = false; // Mostrar opció de reintentar
+  }
 }
 
-form.addEventListener('submit', async(e) => {
-  e.preventDefault();
-  
-  // Save preferences versioned
-  localStorage.setItem(THEME_KEY, ui.themeSelect.value);
-  localStorage.setItem(FONT_KEY, ui.fontRange.value);
-  localStorage.setItem(MOTION_KEY, ui.reduceMotion.checked);
-
-  await startLoading();
-});
-
-// INITIALIZE
-if (checkPreferences()) {
-  startLoading();
-} else {
-  section_pref.hidden = false;
-  section_load.hidden = true;
-  section_menu.hidden = true;
-}
-
-// INVENTORY LOGIC
+// ==========================================
+// 5. INVENTORY LOGIC 
+// ==========================================
 function toggleFavorite(id, btnElement) {
   if (favoriteItems.includes(id)) {
+    // Eliminar de favorits 
     favoriteItems = favoriteItems.filter(fav => fav !== id);
     btnElement.classList.remove('active');
     btnElement.innerHTML = '☆';
   } else {
+    // Afegir a favorits 
     favoriteItems.push(id);
     btnElement.classList.add('active');
     btnElement.innerHTML = '★';
   }
-  localStorage.setItem(FAV_KEY, JSON.stringify(favoriteItems));
+  saveFavorites();
 }
 
 function renderInventory(items) {
-  inventoryGrid.innerHTML = '';
+  DOM.inventoryGrid.innerHTML = '';
   
   if (items.length === 0) {
-    inventoryGrid.innerHTML = '<p style="color: white; text-align: center; grid-column: 1 / -1;">No hay items para mostrar.</p>';
+    //Empty State amb text 
+    DOM.inventoryGrid.innerHTML = `
+      <p style="text-align: center; grid-column: 1 / -1; font-weight: bold; font-size: calc(var(--font-size)*1.5);">
+        No hi ha resultats
+      </p>`;
     return;
   }
 
   items.forEach(item => {
+    // Reestablir classes en base a custom o raritat
     const isFav = favoriteItems.includes(item.id);
-    const cardClass = item.rarity ? item.rarity.replace(" ", "") : "común";
+    const rarityClass = item.rarity ? item.rarity.replace(" ", "") : "común";
+    const modCardClass = item.isCustom ? "custom" : rarityClass;
 
     const card = document.createElement('div');
-    card.className = `item-card ${cardClass}`;
-    
+    card.className = `item-card ${modCardClass}`;
+    // Utilitzem button per millorar accessibilitat focus respecte de simples .onclick
     card.innerHTML = `
       <div class="item-header">
         <div>
-          <!-- Poner icono de la Categoría aquí. Ejemplo: <img src="public/materia.png" /> -->
-          <div class="item-icon-ph">Icon</div> 
+          <div class="item-icon-ph">${item.isCustom ? 'CUST' : 'ICON'}</div> 
         </div>
         <div style="flex-grow: 1; padding-left: 10px;">
           <h3 class="item-title">${item.name}</h3>
           <span class="item-category">${item.category} • ${item.rarity}</span>
         </div>
-        <button class="btn-fav ${isFav ? 'active' : ''}" data-id="${item.id}" aria-label="Añadir a favoritos">
-          <!-- Poner icono de Favorito aquí en lugar del texto -->
+        <button type="button" class="btn-fav ${isFav ? 'active' : ''}" data-id="${item.id}" aria-label="${isFav ? 'Treure favorit' : 'Afegir a favorits'}">
           ${isFav ? '★' : '☆'}
         </button>
       </div>
@@ -199,27 +268,25 @@ function renderInventory(items) {
         <p class="item-desc">${item.description}</p>
       </div>
       <div class="item-footer">
-        <span class="item-price">
-          <!-- Poner icono de Dinero(G) aquí -->
-          🪙 ${item.price} G
-        </span>
+        <span class="item-price">🪙 ${item.price} G</span>
         <span class="item-lvl">Nv. req: ${item.level_req}</span>
       </div>
     `;
 
+    // Vinculem botó Favorit
     const favBtn = card.querySelector('.btn-fav');
     favBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
+      e.stopPropagation(); // Evitar esdeveniment per propagació 
       toggleFavorite(item.id, favBtn);
     });
 
-    inventoryGrid.appendChild(card);
+    DOM.inventoryGrid.appendChild(card);
   });
 }
 
 function filterItems() {
-  const searchTerm = searchInput.value.toLowerCase();
-  const category = categoryFilter.value;
+  const searchTerm = DOM.searchInput.value.toLowerCase();
+  const category = DOM.categoryFilter.value;
 
   const filtered = globalItems.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm);
@@ -230,5 +297,115 @@ function filterItems() {
   renderInventory(filtered);
 }
 
-if (searchInput) searchInput.addEventListener('input', filterItems);
-if (categoryFilter) categoryFilter.addEventListener('change', filterItems);
+// ==========================================
+// 6. EVENT LISTENERS 
+// ==========================================
+function setupEventListeners() {
+  
+  // Preferències Updates
+  DOM.themeSelect.addEventListener('change', () => {
+    applyPreferences(DOM.themeSelect.value, DOM.fontRange.value, DOM.reduceMotion.checked.toString());
+  });
+
+  DOM.fontRange.addEventListener("input", () => {
+    applyPreferences(DOM.themeSelect.value, DOM.fontRange.value, DOM.reduceMotion.checked.toString());
+  });
+  
+  DOM.reduceMotion.addEventListener('change', () => {
+    applyPreferences(DOM.themeSelect.value, DOM.fontRange.value, DOM.reduceMotion.checked.toString());
+  });
+
+  // Guardar preferències
+  DOM.formPref.addEventListener('submit', (e) => {
+    e.preventDefault();
+    localStorage.setItem(THEME_KEY, DOM.themeSelect.value);
+    localStorage.setItem(FONT_KEY, DOM.fontRange.value);
+    localStorage.setItem(MOTION_KEY, DOM.reduceMotion.checked.toString());
+    startAppLoading();
+  });
+  
+  // Opció de Reintentar quan fa error el fetch
+  DOM.btnRetry.addEventListener('click', () => {
+    startAppLoading();
+  });
+
+  // Filtres Cercador i Select
+  if (DOM.searchInput) DOM.searchInput.addEventListener('input', filterItems);
+  if (DOM.categoryFilter) DOM.categoryFilter.addEventListener('change', filterItems);
+  
+  // FORMULARI DE CREACIÓ LÒGICA
+  DOM.btnShowAdd.addEventListener('click', () => {
+    DOM.secAddItem.hidden = !DOM.secAddItem.hidden;
+    if(!DOM.secAddItem.hidden) DOM.formAdd.elements[0].focus(); 
+  });
+  
+  DOM.btnCancelAdd.addEventListener('click', () => {
+    DOM.secAddItem.hidden = true;
+    DOM.formAdd.reset(); // Neteja formulari 
+  });
+  
+  DOM.formAdd.addEventListener('submit', (e) => {
+    e.preventDefault(); // Evita reload 
+    
+    const name = document.getElementById('add_name').value.trim();
+    const cat = document.getElementById('add_cat').value;
+    const rarity = document.getElementById('add_rarity').value;
+    const price = parseInt(document.getElementById('add_price').value);
+    const lvl = parseInt(document.getElementById('add_lvl').value);
+    const desc = document.getElementById('add_desc').value.trim();
+    
+    // Validació Extra protecció accions i camps fora de rang
+    if (!name || !desc) {
+      alert("Error: Informació incompleta.");
+      return;
+    }
+    if (price < 0 || isNaN(price) || lvl < 1 || lvl > 99 || isNaN(lvl)) {
+      alert("Error: Valors numèrics impossibles o fora de rang.");
+      return;
+    }
+    
+    // Muntem l'objecte personalitzat per afegir-lo a l'app i memòria del navegador
+    const newItem = {
+      id: "cust_" + Date.now(),
+      name: name,
+      category: cat,
+      rarity: rarity,
+      level_req: lvl,
+      price: price,
+      description: desc,
+      isCustom: true
+    };
+    
+    customItems.unshift(newItem); // Col·locar al davant de la vista
+    saveCustoms(); // Persistir a localstorage
+    
+    globalItems.unshift(newItem); // Unim als globals renderitzables
+    
+    filterItems(); // Torna a dibuixar la llista
+    
+    // Netejar estat UI
+    DOM.formAdd.reset();
+    DOM.secAddItem.hidden = true;
+  });
+}
+
+// ==========================================
+// 7. APP 
+// ==========================================
+function initApp() {
+  loadPersistedData();
+  setupEventListeners();
+  
+  if (checkAndApplyPreferences()) {
+    // Si tenim preferències s'apliquen directament i carreguem dades
+    startAppLoading();
+  } else {
+    // Si no hi ha preferències, mantenir menú ocult i demanar input a l'usuari
+    DOM.secPref.hidden = false;
+    DOM.secLoad.hidden = true;
+    DOM.secMenu.hidden = true;
+  }
+}
+
+// Inicialitza l'aplicatiu Javascript
+initApp();

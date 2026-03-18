@@ -9,57 +9,106 @@
   <body>
     <main>
       <header>
-
       </header>
 
       <section id="form_preferencias" class="form_pre">
         <div class="panel">
-          <p class="panel-titles">Preferences<p>
+          <p class="panel-title">Preferences</p>
           <form class="pref-form" id="form_pref">
             <div>
-              <label for="theme">theme</label>
+              <label for="theme">Tema</label>
               <select id="theme" name="theme">
-                <option value="dark" selected>dark</option>
-                <option value="light">light</option>
+                <option value="dark" selected>Fosc</option>
+                <option value="light">Clar</option>
               </select>
             </div>
             <div>
               <label for="fontRange">Mida font</label>
-              <input id="fontRange" type="range" min="13" max="36" step="1" />
+              <input id="fontRange" type="range" min="13" max="36" step="1" aria-label="Mida de la font" />
               <span id="fontValue"></span>
             </div>
             <div>
-              <label for="reduce">Reduce motions</label>
-              <input id="reduce" name="reduce" type="checkbox">
+              <label for="reduce">Reduce motion</label>
+              <input id="reduce" name="reduce" type="checkbox" aria-label="Reduir animacions">
             </div>
-            <button id="form_btn">Save preferences</button>
+            <button id="form_btn" class="btn-primary" type="submit">Guardar preferències</button>
           </form>
         </div>
       </section>
 
       <section id="loading" class="load">
         <div class="panel">
-          <p id="loading_msg"></p>
-          <img src="./public/blendertimer-load-38_256.gif">
+          <p id="loading_msg">Carregant...</p>
+          <img src="./public/blendertimer-load-38_256.gif" alt="Loading spinner" id="loading_spinner">
+          <button id="btn_retry" class="btn-danger" hidden>Reintentar</button>
         </div>
       </section>
 
       <section id="menu" class="inventory-section" hidden>
         <div class="inventory-header">
-          <h2>Inventario</h2>
-          <div class="inventory-controls">
-            <input type="text" id="searchInput" placeholder="Buscar por nombre..." />
-            <select id="categoryFilter">
-              <option value="todos">Todos</option>
+          <h2>Inventari</h2>
+          <button id="btn_show_add" class="btn-primary" style="margin-left: 20px;">+ Nou Item</button>
+
+          <div class="inventory-controls" style="margin-left: auto;">
+            <input type="text" id="searchInput" placeholder="Cercar per nom..." aria-label="Cercar per nom" />
+            <select id="categoryFilter" aria-label="Filtrar per categoria">
+              <option value="todos">Tots</option>
               <option value="consumible">Consumibles</option>
-              <option value="arma">Armas</option>
-              <option value="armadura">Armaduras</option>
-              <option value="material">Materiales</option>
+              <option value="arma">Armes</option>
+              <option value="armadura">Armadures</option>
+              <option value="material">Materials</option>
+              <option value="custom">Customs</option>
             </select>
           </div>
         </div>
+
+        <div id="add_item_section" class="panel" style="width: 100%; height: auto; margin-bottom: 20px;" hidden>
+          <p class="panel-title">Crear Nou Item</p>
+          <form id="form_add" class="pref-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2);">
+            <div style="grid-column: 1 / -1;">
+              <label for="add_name">Nom</label>
+              <input type="text" id="add_name" required pattern=".*\S+.*" title="El nom no pot estar buit">
+            </div>
+            <div>
+              <label for="add_cat">Categoria</label>
+              <select id="add_cat" required>
+                <option value="custom">Custom</option>
+                <option value="consumible">Consumible</option>
+                <option value="arma">Arma</option>
+                <option value="armadura">Armadura</option>
+                <option value="material">Material</option>
+              </select>
+            </div>
+            <div>
+              <label for="add_rarity">Raritat</label>
+              <select id="add_rarity" required>
+                <option value="común">Común</option>
+                <option value="poco común">Poco común</option>
+                <option value="raro">Raro</option>
+                <option value="épico">Épico</option>
+                <option value="legendario">Legendario</option>
+              </select>
+            </div>
+            <div>
+              <label for="add_price">Preu (G)</label>
+              <input type="number" id="add_price" min="0" value="0" required>
+            </div>
+            <div>
+              <label for="add_lvl">Nivell req.</label>
+              <input type="number" id="add_lvl" min="1" max="99" value="1" required>
+            </div>
+            <div style="grid-column: 1 / -1; align-items: flex-start; flex-direction: column;">
+              <label for="add_desc" style="margin-bottom: 5px;">Descripció</label>
+              <textarea id="add_desc" rows="2" style="width: 100%; border-radius: 4px; padding: 5px;" required minlength="3"></textarea>
+            </div>
+            <div style="grid-column: 1 / -1; justify-content: flex-end; background: transparent;">
+              <button type="button" id="btn_cancel_add" class="btn-secondary">Cancel·lar</button>
+              <button type="submit" class="btn-primary" style="margin-left: 10px;">Guardar</button>
+            </div>
+          </form>
+        </div>
+
         <div class="inventory-grid" id="inventoryGrid">
-          <!-- Items renderizados por JS se inyectarán aquí -->
         </div>
       </section>
     </main>

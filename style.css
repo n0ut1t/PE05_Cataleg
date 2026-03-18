@@ -1,71 +1,74 @@
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
-:root{
-  --background: #555454;
-  --panel: #B381FA;
+
+:root {
+  --bg: #555454;
+  --text: #ffffff;
+  --accent: #B381FA;
+  --border: rgba(255, 255, 255, 0.2);
+  --s-1: 10px;
+  --s-2: 15px;
+  --s-3: 20px;
+
   --font: "Chakra Petch", sans-serif;
   --font-size: 13px;
   --wait: #AF0502;
   --ok: #00D777;
   --error: #FF012D;
 }
-body{
-  background-color: var(--background);
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
   font-family: var(--font);
   margin: 0;
   overflow: hidden;
+  transition: background-color 0.3s;
 }
-p{
+
+p, label, span, div, h1, h2, h3 {
+  color: var(--text);
+}
+
+p {
   font-size: var(--font-size);
 }
-.loading{
-  color: var(--wait)
-}
 
-.ok{
-  color: var(--ok);
-}
+.loading { color: var(--wait); }
+.ok { color: var(--ok); }
+.error { color: var(--error); }
 
-.error{
-  color: var(--error);
-}
-
-.form_pre{
+.form_pre, .load {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
 }
 
-.load{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-.load p{
+.load p {
   position: absolute;
   font-family: var(--font);
   margin: 0;                
   padding-bottom: 200px;
+  font-weight: bold;
 }
-.load img{
+
+.load img {
   max-width: 100%;
   height: auto;
 }
 
-.panel{
-  background-color: var(--panel); 
-  border-radius: 20px;
-  padding: 20px;
+.panel {
+  background-color: var(--accent); 
+  border-radius: var(--s-3);
+  padding: var(--s-3);
 
   display: flex;
   flex-direction: column;   
   justify-content: center;  
   align-items: center;      
-  gap: 15px;                
+  gap: var(--s-2);                
   
   width: 450px; 
-  height: 280px;
 }
 
 .panel-title {
@@ -77,29 +80,29 @@ p{
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   width: 100%;
   text-align: center;
-  padding-bottom: 10px;
-  margin-bottom: 10px;
+  padding-bottom: var(--s-1);
+  margin-bottom: var(--s-1);
 }
 
 .pref-form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: var(--s-2);
 }
 
 .pref-form div {
   display: flex;
   justify-content: space-between; 
   align-items: center;
-  padding: 5px 10px;
-  background: rgba(255, 255, 255, 0.1); 
+  padding: 5px var(--s-1);
+  background: rgba(0, 0, 0, 0.2); 
   border-radius: 8px;
   transition: background 0.3s;
 }
 
 .pref-form div:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .pref-form label {
@@ -108,20 +111,24 @@ p{
   font-size: var(--font-size);
 }
 
+.pref-form input[type="text"],
+.pref-form input[type="number"],
 .pref-form select, 
-.pref-form input[type="range"] {
-  cursor: pointer;
+.pref-form input[type="range"],
+.pref-form textarea {
   font-family: var(--font);
-  border: none;
+  border: 2px solid transparent;
   background: white;
+  color: #333;
   border-radius: 4px;
-  padding: 2px 5px;
+  padding: 4px 8px;
+  transition: border-color 0.2s;
 }
 
 .pref-form input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: var(--ok)
+  accent-color: var(--ok);
 }
 
 #fontValue {
@@ -131,27 +138,64 @@ p{
   display: inline-block;
 }
 
+button {
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: calc(var(--font-size) * 1.1);
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background-color: #3498db;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.btn-primary:hover { background-color: #2980b9; transform: translateY(-2px); }
+
+.btn-secondary {
+  background-color: #95a5a6;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.btn-secondary:hover { background-color: #7f8c8d; transform: translateY(-2px); }
+
+.btn-danger {
+  background-color: var(--error);
+  color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.btn-danger:hover { background-color: #c0392b; transform: translateY(-2px); }
+
+:focus-visible {
+  outline: 3px solid var(--ok);
+  outline-offset: 2px;
+}
+
 [hidden] {
   display: none !important;
 }
 
-/* Inventory Styles */
 .inventory-section {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  padding: 40px;
+  padding: calc(var(--s-3) * 2);
   box-sizing: border-box;
   animation: fadeIn 0.5s ease-out;
 }
 
 .inventory-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  border-bottom: 2px solid var(--panel);
-  padding-bottom: 15px;
+  margin-bottom: var(--s-3);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: var(--s-2);
+  flex-wrap: wrap;
+  gap: var(--s-2);
 }
 
 .inventory-header h2 {
@@ -160,12 +204,12 @@ p{
   text-transform: uppercase;
   letter-spacing: 3px;
   color: #fff;
-  text-shadow: 2px 2px 0px var(--panel);
+  text-shadow: 2px 2px 0px var(--accent);
 }
 
 .inventory-controls {
   display: flex;
-  gap: 15px;
+  gap: var(--s-2);
 }
 
 .inventory-controls input,
@@ -173,7 +217,7 @@ p{
   padding: 8px 15px;
   font-family: var(--font);
   font-size: var(--font-size);
-  border: 2px solid var(--panel);
+  border: 2px solid var(--accent);
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.4);
   color: #fff;
@@ -185,25 +229,24 @@ p{
 .inventory-controls select:focus {
   border-color: var(--ok);
   background: rgba(0, 0, 0, 0.6);
-  box-shadow: 0 0 10px var(--panel);
+  box-shadow: 0 0 10px var(--accent);
 }
 
 .inventory-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  gap: var(--s-3);
   overflow-y: auto;
-  padding-right: 10px;
+  padding-right: var(--s-1);
   flex-grow: 1;
   min-height: 0;
 }
 
-/* Card Styling */
 .item-card {
   background: rgba(0, 0, 0, 0.4);
-  border: 1px solid var(--panel);
+  border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 20px;
+  padding: var(--s-3);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -218,7 +261,7 @@ p{
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 4px;
-  background: var(--panel);
+  background: var(--accent);
   border-radius: 12px 12px 0 0;
 }
 
@@ -227,12 +270,13 @@ p{
 .item-card.raro::before { background: #3498db; }
 .item-card.épico::before { background: #9b59b6; }
 .item-card.legendario::before { background: #f1c40f; }
+.item-card.custom::before { background: #e84393; }
 
 .item-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(179, 129, 250, 0.3);
+  box-shadow: 0 10px 20px rgba(179, 129, 250, 0.4);
   background: rgba(20, 20, 20, 0.8);
-  border-color: #fff;
+  border-color: var(--accent);
 }
 
 .item-header {
@@ -253,7 +297,7 @@ p{
 .item-category {
   font-size: calc(var(--font-size) * 0.8);
   font-weight: 600;
-  color: var(--panel);
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -277,8 +321,8 @@ p{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: var(--s-1);
   margin-top: 5px;
 }
 
@@ -302,9 +346,10 @@ p{
   cursor: pointer;
   transition: color 0.3s, transform 0.2s;
   padding: 0;
+  box-shadow: none;
 }
-
 .btn-fav:hover {
+  background: none;
   transform: scale(1.3);
   color: #fff;
 }
@@ -325,7 +370,7 @@ p{
   font-size: 10px;
   color: #aaa;
   text-align: center;
-  border: 1px dashed var(--panel);
+  border: 1px dashed var(--accent);
 }
 
 @keyframes fadeIn {
@@ -352,7 +397,7 @@ p{
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--panel);
+  background: var(--accent);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -363,10 +408,16 @@ p{
   .inventory-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
   }
   .inventory-controls {
     width: 100%;
     flex-direction: column;
+    margin-left: 0 !important;
+  }
+  .panel {
+    width: 90%;
+  }
+  .pref-form {
+    grid-template-columns: 1fr !important;
   }
 }
